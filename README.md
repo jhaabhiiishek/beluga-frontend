@@ -1,70 +1,214 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+```markdown
+# Malware Detection Tool
 
-In the project directory, you can run:
+A full-stack web application for static malware analysis.  
+The tool allows users to upload files (e.g., `.exe`, `.pdf`, `.docx`), perform static analysis using YARA rules and the VirusTotal API, and display a vulnerability score with detailed results. It also supports user profiling with email/password authentication and segmented scan logs per user.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Static Analysis**:  
+  Analyze files using a combination of custom YARA rules and VirusTotal API checks.
+  
+- **Multi-File Support**:  
+  Accepts various file types: Windows executables (.exe), PDFs, DOCX files, and YARA rule files (.yar, .yara).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Risk Factor Reporting**:  
+  Identifies specific parts of the file that triggered malicious indicators.
 
-### `npm test`
+- **User Authentication**:  
+  Sign up and log in using email and password (JWT-based).  
+  All scan logs are associated with the authenticated user.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Custom YARA Rule Builder**:  
+  Create new YARA rules on the fly using a builder interface.
 
-### `npm run build`
+- **Responsive and Modern UI**:  
+  iOS-inspired design with mobile-responsive pages.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Safe Static Analysis**:  
+  The backend performs *only static analysis* without sandboxing or executing the file.  
+  **Warning:** Always analyze malware in an isolated environment for safety.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Setup Instructions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+- **Python 3.9+**
+- **Node.js (v14 or later) and npm**
+- **Git**
+- For production, we recommend using a virtual machine or container (see [Deployment](#deployment) below).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend Setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Clone the repository:**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   git clone https://github.com/yourusername/malware-detection-tool.git
+   cd malware-detection-tool/backend
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Create and activate a Python virtual environment:**
 
-## Learn More
+   ```bash
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\activate
+   # On Unix or MacOS:
+   source venv/bin/activate
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. **Install backend dependencies:**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Code Splitting
+   Ensure your `requirements.txt` includes packages such as:
+   - Flask
+   - flask-cors
+   - flask-sqlalchemy
+   - flask-jwt-extended
+   - yara-python
+   - requests
+   - python-dotenv
+   - Werkzeug
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. **Set Environment Variables:**
 
-### Analyzing the Bundle Size
+   Create a `.env` file (or set environment variables in your deployment environment) with:
+   ```ini
+   SECRET_KEY=your_secret_key_here
+   JWT_SECRET_KEY=your_jwt_secret_here
+   API_KEY=your_default_virustotal_api_key_here
+   ```
+   (If you want users to supply their own VirusTotal API key for detailed scans, that field is passed in via the frontend.)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+5. **Initialize the Database:**
 
-### Making a Progressive Web App
+   If using SQLite, delete any existing `scan_logs.db` file (for development) and let the application create a new one:
+   ```bash
+   del scan_logs.db   # on Windows
+   rm scan_logs.db    # on Unix/MacOS
+   python app.py      # This will create a new database with updated models.
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+6. **Run the Backend:**
 
-### Advanced Configuration
+   ```bash
+   python app.py
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+   The backend will start on [http://localhost:5000](http://localhost:5000).
 
-### Deployment
+### Frontend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. **Navigate to the frontend folder:**
 
-### `npm run build` fails to minify
+   ```bash
+   cd ../frontend
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+2. **Install frontend dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Run the Frontend:**
+
+   ```bash
+   npm start
+   ```
+
+   The app should now be accessible (usually on [http://localhost:3000](http://localhost:3000)).
+
+### Deployment Recommendations
+
+For your hackathon deployment, consider the following:
+
+#### Backend
+
+- **Dockerize the Backend:**  
+  Create a `Dockerfile` for your backend so that it can be deployed in an isolated container.  
+  Example:
+  ```dockerfile
+  FROM python:3.9-slim
+  ENV PYTHONDONTWRITEBYTECODE=1
+  ENV PYTHONUNBUFFERED=1
+  WORKDIR /app
+  COPY requirements.txt /app/
+  RUN pip install --upgrade pip && pip install -r requirements.txt
+  COPY . /app/
+  EXPOSE 5000
+  CMD ["python", "app.py"]
+  ```
+  Then build and run:
+  ```bash
+  docker build -t malware-detection-backend .
+  docker run -d -p 5000:5000 malware-detection-backend
+  ```
+
+- **Secure Environment:**  
+  Since malware files are being statically analyzed, ensure the backend is deployed on an isolated network or VM.  
+  **Warning:** Do not run this system on production servers without proper isolation and security measures.
+
+#### Frontend
+
+- **Static Site Hosting:**  
+  Deploy your React frontend on services like **Netlify**, **Vercel**, or **GitHub Pages**.  
+  Simply build the project:
+  ```bash
+  npm run build
+  ```
+  And follow the hosting service instructions to deploy the build folder.
+
+### User Profiling & Security
+
+- **User Authentication:**  
+  Users sign up and log in with email and password. Their JWT token is stored in localStorage and used to authorize all API calls.
+- **Scan Logs are Segmented:**  
+  Each scan log is saved with the user’s ID so that users only see their own logs.
+- **VirusTotal API Key:**  
+  The default API key is set in the environment, but for detailed scans, users may provide their own key via the frontend.
+- **Static Analysis Only:**  
+  The backend performs static analysis using YARA and VirusTotal API. It does not execute any uploaded file, keeping your system safe (though always run such tools in isolated environments).
+
+## Features Recap
+
+- **Static File Analysis:**  
+  Uses YARA rules and VirusTotal API to analyze uploaded files.
+- **User Authentication:**  
+  Signup and login using email/password with JWT-based protection.
+- **User-Specific Logs:**  
+  Scan logs are associated with the user who performed them.
+- **Custom Rule Builder:**  
+  Build custom YARA rules dynamically.
+- **Responsive, Modern UI:**  
+  Frontend components are styled with an iOS-inspired design and mobile responsiveness.
+- **Optional VirusTotal API Key Input:**  
+  Users may supply their own API key when requesting detailed scans.
+- **Deployment Ready:**  
+  Dockerfile and build instructions for both frontend and backend are provided.
+
+## Final Notes
+
+- **Safety Disclaimer:**  
+  This tool performs only static analysis. Do **NOT** run or execute any uploaded malware. Always use proper isolation (e.g., VMs or containers) when analyzing potentially malicious files.
+- **Hackathon Ready:**  
+  The solution is designed for demonstration purposes and should be deployed in an isolated, secure environment for safe operation.
+
+---
+
+Copy and paste this content into your `README.md` file for your GitHub repository. Adjust any details (such as repository URL, environment variables, or specific commands) as needed for your setup.
+
+Happy hacking and good luck at your hackathon!
+```
+
+---
+
+This README provides clear instructions for setup, features, and deployment recommendations while reminding users to operate in safe, isolated environments when analyzing malware files.
+
+Let me know if you need further modifications or additions!

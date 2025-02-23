@@ -45,7 +45,7 @@ The tool allows users to upload files (e.g., `.exe`, `.pdf`, `.docx`), perform s
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/malware-detection-tool.git
+   git clone https://github.com/jhaabhiiishek/beluga.git
    cd malware-detection-tool/backend
    ```
 
@@ -83,8 +83,7 @@ The tool allows users to upload files (e.g., `.exe`, `.pdf`, `.docx`), perform s
    JWT_SECRET_KEY=your_jwt_secret_here
    API_KEY=your_default_virustotal_api_key_here
    ```
-   (If you want users to supply their own VirusTotal API key for detailed scans, that field is passed in via the frontend.)
-
+   
 5. **Initialize the Database:**
 
    If using SQLite, delete any existing `scan_logs.db` file (for development) and let the application create a new one:

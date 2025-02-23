@@ -197,18 +197,3 @@ For your hackathon deployment, consider the following:
 
 - **Safety Disclaimer:**  
   This tool performs only static analysis. Do **NOT** run or execute any uploaded malware. Always use proper isolation (e.g., VMs or containers) when analyzing potentially malicious files.
-- **Hackathon Ready:**  
-  The solution is designed for demonstration purposes and should be deployed in an isolated, secure environment for safe operation.
-
----
-
-Copy and paste this content into your `README.md` file for your GitHub repository. Adjust any details (such as repository URL, environment variables, or specific commands) as needed for your setup.
-
-Happy hacking and good luck at your hackathon!
-```
-
----
-
-This README provides clear instructions for setup, features, and deployment recommendations while reminding users to operate in safe, isolated environments when analyzing malware files.
-
-Let me know if you need further modifications or additions!

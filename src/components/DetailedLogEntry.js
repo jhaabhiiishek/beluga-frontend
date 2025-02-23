@@ -9,7 +9,10 @@ const DetailedLogEntry = () => {
   useEffect(() => {
     const fetchLog = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/logs');
+        const token = localStorage.getItem('token');
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        console.log(config," ", token)
+        const res = await axios.get('http://localhost:5000/api/logs',config);
         const entry = res.data.find(item => item.id === parseInt(id));
         setLog(entry);
       } catch (err) {

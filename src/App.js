@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import DefaultScan from './components/DefaultScan';
+import DetailedScan from './components/DetailedScan';
 import CustomScan from './components/CustomScan';
 import RuleBuilder from './components/RuleBuilder';
 import LogsViewer from './components/LogsViewer';
-import DetailedScan from './components/DetailedScan';
 import DetailedLogEntry from './components/DetailedLogEntry';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  const [authToken, setAuthToken] = useState(localStorage.getItem('token') || "");
+
+  // Check token on mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthToken(token);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setAuthToken("");
+  };
+
   const containerStyle = {
     minHeight: '100vh',
     backgroundColor: '#f9fafb',
     color: '#1f2937',
     display: 'flex',
     flexDirection: 'column',
-    whiteSpace: 'pre-wrap', wordWrap: 'break-word', margin: 0
+    whiteSpace: 'pre-wrap',
+    wordWrap: 'break-word',
+    margin: 0
   };
 
   const headerStyle = {
@@ -26,6 +46,9 @@ function App() {
     maxWidth: '1200px',
     margin: '0 auto',
     padding: '1.5rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   };
 
   const navStyle = {
@@ -65,6 +88,32 @@ function App() {
             <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>
               Malware Detection Tool
             </h1>
+            <div>
+              {authToken ? (
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    backgroundColor: '#2563eb',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '4px',
+                    padding: '8px 16px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link to="/login" style={{ color: '#2563eb', textDecoration: 'none', marginRight: '12px' }}>
+                    Login
+                  </Link>
+                  <Link to="/signup" style={{ color: '#2563eb', textDecoration: 'none' }}>
+                    Signup
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </header>
         <nav style={navStyle}>
@@ -98,12 +147,38 @@ function App() {
         </nav>
         <main style={mainStyle}>
           <Routes>
-            <Route path="/" element={<DefaultScan />} />
-            <Route path="/detailed" element={<DetailedScan />} />
-            <Route path="/custom" element={<CustomScan />} />
-            <Route path="/builder" element={<RuleBuilder />} />
-            <Route path="/logs" element={<LogsViewer />} />
-            <Route path="/logs/detailed/:id" element={<DetailedLogEntry />} />
+            <Route path="/login" element={<Login setAuthToken={setAuthToken} />} />
+            <Route path="/signup" element={<Signup setAuthToken={setAuthToken} />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <DefaultScan />
+              </ProtectedRoute>
+            } />
+            <Route path="/detailed" element={
+              <ProtectedRoute>
+                <DetailedScan />
+              </ProtectedRoute>
+            } />
+            <Route path="/custom" element={
+              <ProtectedRoute>
+                <CustomScan />
+              </ProtectedRoute>
+            } />
+            <Route path="/builder" element={
+              <ProtectedRoute>
+                <RuleBuilder />
+              </ProtectedRoute>
+            } />
+            <Route path="/logs" element={
+              <ProtectedRoute>
+                <LogsViewer />
+              </ProtectedRoute>
+            } />
+            <Route path="/logs/detailed/:id" element={
+              <ProtectedRoute>
+                <DetailedLogEntry />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
         <footer style={footerStyle}>

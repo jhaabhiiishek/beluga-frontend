@@ -82,6 +82,14 @@ const CustomScan = () => {
     fontSize: '1rem',
   };
 
+  
+  const token = localStorage.getItem('token');
+  const authConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  
   // Handlers
   const onExeChange = (e) => setExeFile(e.target.files[0]);
   const onYaraChange = (e) => setYaraFile(e.target.files[0]);
@@ -102,7 +110,7 @@ const CustomScan = () => {
     formData.append('exe_file', exeFile);
     formData.append('yara_file', yaraFile);
     try {
-      const res = await axios.post('http://localhost:5000/api/scan_custom', formData);
+      const res = await axios.post('http://localhost:5000/api/scan_custom', formData,authConfig);
       setResult(res.data.result);
     } catch (err) {
       setResult('Error scanning file with custom rule');

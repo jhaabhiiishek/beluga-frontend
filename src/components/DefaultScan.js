@@ -76,6 +76,8 @@ const DefaultScan = () => {
     overflow:'wrap',
     marginTop: '16px',
     whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    wordWrap: 'break-word',
   };
 
   // Handlers
@@ -87,6 +89,13 @@ const DefaultScan = () => {
     hiddenFileInputRef.current.click();
   };
 
+  const token = localStorage.getItem('token');
+  const authConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!file) return;
@@ -96,10 +105,15 @@ const DefaultScan = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const res = await axios.post('http://localhost:5000/api/scan_default', formData);
-	  console.log(res.data.result);
-	  console.log(res);
-      setResult(res.data.result);
+      await axios.post('http://localhost:5000/api/scan_default', formData,authConfig)
+      .then(res => {
+        console.log(res.data);
+        if(res.data.error){
+          setError(res.data.error);
+        }else{
+          setResult(res.data.result);
+        }
+      });
     } catch (err) {
       setResult('Error scanning file');
     }
@@ -124,7 +138,7 @@ const DefaultScan = () => {
             type="file"
             ref={hiddenFileInputRef}
             onChange={onFileChange}
-            accept=".exe"
+            accept=".exe,.pdf,.docx,.yar,.yara"
             style={{ display: 'none' }}
           />
         </div>
@@ -138,7 +152,7 @@ const DefaultScan = () => {
       {result && (
         <div style={resultStyle}>
           <h3>Result:</h3>
-          <pre>{result}</pre>
+          <div>{result}</div>
         </div>
       )}
     </div>

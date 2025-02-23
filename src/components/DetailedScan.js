@@ -117,6 +117,13 @@ const DetailedScan = () => {
     fileInputRef.current.click();
   };
 
+  const token = localStorage.getItem('token');
+  const authConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!file) return;
@@ -129,10 +136,15 @@ const DetailedScan = () => {
       formData.append('api_key', apiKey.trim());
     }
     try {
-      const res = await axios.post('http://localhost:5000/api/scan', formData);
+      const res = await axios.post('http://localhost:5000/api/scan', formData,authConfig);
       setResult(res.data);
     } catch (err) {
-      setError('Error scanning file');
+      if (err.response && err.response.data) {
+        console.error("Backend error:", err.response.data);
+        setError(err.response.data.error || 'Error scanning file');
+      } else {
+        setError('Error scanning file');
+      }
     } finally {
       setLoading(false);
     }

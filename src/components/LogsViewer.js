@@ -49,7 +49,9 @@ const LogsViewer = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/logs');
+        const token = localStorage.getItem('token');
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        const res = await axios.get('http://localhost:5000/api/logs',config);
         setLogs(res.data);
       } catch (err) {
         console.error('Error fetching logs');

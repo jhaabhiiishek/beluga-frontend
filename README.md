@@ -1,5 +1,7 @@
 
-# Malware Detection Tool
+#  Beluga - A Malware Detection Tool
+
+by Abhishek Kumar Jha
 
 A full-stack web application for static malware analysis.  
 The tool allows users to upload files (e.g., `.exe`, `.pdf`, `.docx`), perform static analysis using YARA rules and the VirusTotal API, and display a vulnerability score with detailed results. It also supports user profiling with email/password authentication and segmented scan logs per user.

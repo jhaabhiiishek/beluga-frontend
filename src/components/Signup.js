@@ -21,14 +21,14 @@ const Signup = ({ setAuthToken }) => {
   const titleStyle = {
     fontSize: '2rem',
     fontWeight: '600',
-    marginBottom: '24px',
+    marginBottom: '50px',
     textAlign: 'center',
   };
 
   const inputStyle = {
     display: 'block',
-    width: '100%',
-    padding: '12px',
+    width: '95%',
+    padding: '2.5%',
     marginBottom: '24px',
     border: '1px solid #d1d5db',
     borderRadius: '6px',

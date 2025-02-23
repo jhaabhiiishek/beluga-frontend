@@ -1,7 +1,4 @@
 
----
-
-```markdown
 # Malware Detection Tool
 
 A full-stack web application for static malware analysis.  

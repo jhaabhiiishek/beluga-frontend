@@ -101,13 +101,14 @@ const DetailedScan = () => {
     marginRight: "12px"
   };
   const inputStyle = {
-    width: '100%',
-    padding: '12px',
+    display: 'block',
+    width: '95%',
+    padding: '2.5%',
+    marginBottom: '24px',
     border: '1px solid #d1d5db',
     borderRadius: '6px',
     fontSize: '1rem',
   };
-
   // Handlers
   const onFileChange = (e) => {
     setFile(e.target.files[0]);

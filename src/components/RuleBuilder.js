@@ -32,9 +32,9 @@ const RuleBuilder = () => {
 
   const inputStyle = {
     display: 'block',
-    width: '100%',
+    width: '95%',
+    padding: '2.5%',
     marginBottom: '24px',
-    padding: '12px',
     border: '1px solid #d1d5db',
     borderRadius: '6px',
     fontSize: '1rem',

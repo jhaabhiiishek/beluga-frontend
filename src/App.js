@@ -90,7 +90,7 @@ function App() {
     borderRadius: '25px',
     padding: '10px 20px',
     cursor: 'pointer',
-    fontSize: '1rem',
+    fontSize: '0.8rem',
     fontWeight: '500',
     marginLeft: '12px',
     transition: 'transform 0.15s ease-in-out',
